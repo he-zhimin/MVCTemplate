@@ -110,7 +110,7 @@
 
                     <li class="nav-item"><a href="#" class="badge badge-info">管理员:</a><a href="#" class="badge badge-secondary">Admin</a></li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">个人信息</a>
+                        <a class="nav-link active" href="javascript:ShowUserInfoDiv()">个人信息</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">安全设置</a>
@@ -132,7 +132,12 @@
             </div>
         </div>
     </div>
-
+    <script>
+        $("#UserInfoDiv").hide();
+        function ShowUserInfoDiv() {
+            $("#UserInfoDiv").fadeIn(3000);
+        }
+    </script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

@@ -56,7 +56,7 @@ namespace MVC
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=User}/{action=UserCenter}/{id?}");
+                    template: "{controller=User}/{action=Login}/{id?}");
             });
         }
     }
