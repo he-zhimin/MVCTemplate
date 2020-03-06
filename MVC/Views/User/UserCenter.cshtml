@@ -1,0 +1,157 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>用户中心</title>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="~/css/style.css" rel="stylesheet" />
+    <script src="~/StaticResources/layer/layer.js"></script>
+
+    <style>
+        body {
+            background-image: url('/StaticResources/Img/bg2.jpg');
+            text-align: center;
+            color: aliceblue;
+        }
+
+        #s {
+            font-size: 23px
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md">
+
+                <nav class="navbar  navbar-expand-lg  " style="background:rgba(0,0,0,0.1); color:aliceblue">
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active" style="margin-left:230px">
+                                <a class="nav-link" href="#">首页 <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    库存管理
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background:rgba(0,0,0,0.2);">
+                                    <a class="dropdown-item" href="#">仓库设置</a>
+                                    <a class="dropdown-item" href="#">采购入库</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">采购出库</a>
+                                    <a class="dropdown-item" href="#">库存查询</a>
+                                    <a class="dropdown-item" href="#">库存预警</a>
+
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    商品管理
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background:rgba(0,0,0,0.2);">
+                                    <a class="dropdown-item" href="#">商品资料</a>
+                                    <a class="dropdown-item" href="#">商品分析</a>
+                                    <div class="dropdown-divider"></div>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    公司管理
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background:rgba(0,0,0,0.2);">
+                                    <a class="dropdown-item" href="#">角色管理</a>
+                                    <a class="dropdown-item" href="#">员工管理</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">职务管理</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    订单管理
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background:rgba(0,0,0,0.2);">
+                                    <a class="dropdown-item" href="#">待审核订单</a>
+                                    <a class="dropdown-item" href="#">已完成订单</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">退货订单</a>
+                                    <a class="dropdown-item" href="#">订单查询</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    财务管理
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="background:rgba(0,0,0,0.2);">
+                                    <a class="dropdown-item" href="#">付款单</a>
+                                    <a class="dropdown-item" href="#">收入单</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">本月综合分析</a>
+                                </div>
+                            </li>
+                        </ul>
+                        <form class="form-inline my-2 my-lg-0">
+                            <input class="form-control mr-sm-2" style="background:rgba(0,0,0,0.3);" type="search" placeholder="Search" aria-label="Search">
+                            <button class="btn btn-outline-info " type="button">Search</button>
+                        </form>
+                    </div>
+                </nav>
+            </div>
+
+        </div>
+
+        <div class="row" style="style=" background:rgba(0,0,0,0.1);">
+            <div class="col-md-2" id="s">
+                <ul class="nav flex-column">
+                    <li class="nav-item"><img style="width:180px;height:180px;border-radius:50%;opacity:0.8" src="~/StaticResources/Img/admin.png" /></li>
+
+                    <li class="nav-item"><a href="#" class="badge badge-info">管理员:</a><a href="#" class="badge badge-secondary">Admin</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">个人信息</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">安全设置</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">注销</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Queque</a>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="col-md-10" id="s">
+
+                <div class="card  text-white" style="background:rgba(0,0,0,0.3);width:100%;margin:0 0">
+                    <img src="~/StaticResources/Img/admin.png" class="card-img" alt="..." style="opacity:0.3">
+                    <div class="card-img-overlay">
+                        <h5 class="card-title">缺缺作品</h5>
+                        <p class="card-text">All source code will be uploaded to GitHub, interested can download the view, welcome to communicate with everyone!</p>
+                        <p class="card-text">Last updated 3 mins ago</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+
+    </script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script type="text/javascript" color="228,48,75" opacity='1' zIndex="-1" count="498" src="~/dist/canvas-nest.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
