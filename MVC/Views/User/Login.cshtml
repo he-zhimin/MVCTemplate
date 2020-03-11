@@ -14,6 +14,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="~/css/style.css" rel="stylesheet" />
+    <script src="~/layer/layer.js"></script>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/layui/layui.js"></script>
     <style>
         body {
             background-image: url('/StaticResources/Img/greebg.jpg');
@@ -32,10 +35,37 @@
                     <div class="card-img-overlay">
                         <h5 class="card-title" style="font-size:28px">Welcome to visit </h5>
                         <p class="card-text" style="font-size:19px">Here, you can communicate with the author, learn together and share information.Looking forward to your joining us!</p>
-                        <p class="card-text" style="font-size:19px;margin-top:12px">Click below to log in!Didn't you?Sign up for one!&nbsp; <a href="/User/Register" class="badge badge-primary">To Register</a></p>@*去往注册按钮*@
+                        <p class="card-text" style="font-size:19px;margin-top:12px">Click below to log in!Didn't you?Sign up for one!&nbsp; <a href="/User/Register" class="badge badge-primary">注册</a></p>@*去往注册按钮*@
                         <p style="font-size:19px;margin-top:12px"> We'll never share your email and phone with anyone else  </p>
-                        <p><button type="button" class="btn btn-warning" id="ShowLoginDiv" style="margin-top:12px">Login</button></p>@*显示登录框按钮*@
+
+                        <p>
+                            @*显示登录框按钮*@
+                            <button type="button" class="btn btn-info " id="ShowLoginDiv" style="margin-top:12px">Login In</button>
+                        </p>
+                        <p>
+                        </p>
                     </div>
+                </div>
+                <div id="PhoneLoginDiv">
+                    @*手机登录框*@
+                    <form style="margin:370px auto;width:300px" class="layui-form">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Phone Number</label>
+                            @*手机号*@
+                            <input id="PhoneNumber" type="text" required class="form-control" style="background:rgba(0,0,0,0.5);color:aliceblue;border-width:2px" placeholder="Please enter your Phone">
+                        </div>
+                        <div class="form-group form-inline">
+
+                            @*手机验证码*@
+                            <input id="ValidateCode" type="text" class="form-control" style="background:rgba(0,0,0,0.5);color:aliceblue;border-width:2px;width:186px" placeholder=" Verification code">
+                            <button id="GetCodeBtn" type="button" class="btn btn-outline-info">Get Code</button>
+
+                        </div>
+                        @*注册按钮*@
+                        <button type="button" class="btn btn-warning" id="PhoneLogin">Login</button>
+
+                    </form>
+
                 </div>
                 <div id="LoginDiv">
                     @*登录框*@
@@ -43,13 +73,14 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Account</label>
                             @*账号*@
-                            <input type="text" class="form-control" style="background:rgba(0,0,0,0.4);border-width:2px" placeholder="Please enter your Account">
+                            <input type="text" class="form-control" style="background:rgba(0,0,0,0.4);color:aliceblue;border-width:2px" placeholder="Please enter your Account">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Password</label>
                             @*密码框*@
-                            <input type="password" class="form-control" style="background:rgba(0,0,0,0.4);border-width:2px" placeholder="Please enter your password">
-                            <a href="#" class="badge badge-danger">Forgot password</a>
+                            <input type="password" class="form-control" style="background:rgba(0,0,0,0.4);color:aliceblue;border-width:2px" placeholder="Please enter your password">
+                            <a href="javascript:ShowPhoneLoginDiv()" class="badge badge-primary" style="margin-top:6px;font-size:13px" id="ShowPhoneLoginDiv">手机验证码登录</a>
+
 
                         </div>
 
@@ -65,16 +96,76 @@
         </div>
     </div>
 
+
     <script>
-        $("#Login").click(function () {
-            location.href = '/User/UserCenter';
+
+        //
+        //验证码获取事件
+        $("#GetCodeBtn").click(function () {
+            var phone = $("#PhoneNumber").val();
+            if (phone == "") {
+                layer.msg("电话号码不能为空！");
+                return false;
+            }
+            //手机号正则
+            var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+            //电话
+            if (!phoneReg.test(phone)) {
+                layer.msg('请输入有效的手机号码！');
+                return false;
+            }
+            var code = $("#ValidateCode").val();
+
+
+
+            //$.ajax({
+            //    url: 'http://localhost:58545/api/BaiDu/ProblemAdd'
+            //    //, headers: { token: sessionStorage.getItem("user") }
+            //    , type: 'post'
+            //    , data: { PhoneNumber: phone, ValidateCode: "1" }
+            //}).done(function (res) {
+
+            //}).fail(function (jqXHR, textStatus, errorThrown) {
+
+            //});
+
         });
+        //
+        //手机登录按钮事件
+        $("#PhoneLogin").click(function () {
+
+        });
+    </script>
+
+
+
+
+
+
+
+    <script>
+        //
+        //电话登录框特效
+        $("#PhoneLoginDiv").hide();
+        function ShowPhoneLoginDiv() {
+
+            $("#ShowPhoneLoginDiv").fadeOut(1000);
+            $("#PhoneLoginDiv").fadeIn(1000);
+            $("#ShowLoginDiv").html("返回");
+            $("#ShowLoginDiv").fadeIn(1000);
+            $("#LoginDiv").hide();
+        }
+
+
+
         //
         //登录框特效
         $("#LoginDiv").hide();
         $("#ShowLoginDiv").click(function () {
-            $("#ShowLoginDiv").fadeOut(2000);
-            $("#LoginDiv").fadeIn(3000);
+            $("#ShowLoginDiv").fadeOut(1000);
+            $("#LoginDiv").fadeIn(1000);
+            $("#ShowPhoneLoginDiv").fadeIn(1000);
+            $("#PhoneLoginDiv").hide();
         }); //登录框特效
 
     </script>
