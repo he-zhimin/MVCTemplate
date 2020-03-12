@@ -14,27 +14,35 @@
     <link href="~/css/style.css" rel="stylesheet" />
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="~/layer/layer.js"></script>
+    <script src="~/layui/jquery.cookie.js"></script>
     <style>
         body {
             background-image: url('/StaticResources/Img/bg3.jpg');
             text-align: center;
-            color: aliceblue;
         }
     </style>
 
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" style=" color: aliceblue;">
         <div class="row">
             <div class="col-sm">
                 <div class="card bg-dark text-white" style="margin-top:40px">
                     <div class="card-img-overlay">
                         <h5 class="card-title" style="font-size:28px">Looking forward to your joining us </h5>
                         <p class="card-text" style="font-size:19px">I will not register as our member through your mobile phone number, we will send you a message verification code.We don't share your phone number with anyone!</p>
-                        <p class="card-text" style="font-size:18px">If you are ready, we will start to register!</p> 
-                        
-                        <p><button type="button" class="btn btn-info" id="ShowRegisterDiv">Register</button></p>@*显示注册框按钮*@
+                        <p class="card-text" style="font-size:18px">If you are ready, we will start to register!</p>
+                        <p>
+                            <button type="button" class="btn btn-primary" id="GotoLogin">To Login In</button>
+                        </p>
+                        <p>
+                            <button type="button" class="btn btn-info" id="ShowRegisterDiv">Began To Register</button>
+
+                        </p>@*显示注册框按钮*@
+
                     </div>
                 </div>
                 <div id="RegisterDiv">
@@ -43,13 +51,13 @@
                         <div class="form-group">
                             <label for="exampleInputEmail1">Phone Number</label>
                             @*手机号*@
-                            <input type="text" class="form-control" style="background:rgba(0,0,0,0.5);border-width:2px" placeholder="Please enter your Phone">
+                            <input type="text" id="PhoneNumber" class="form-control" style="background:rgba(0,0,0,0.5);color:aliceblue;border-width:2px" placeholder="Please enter your Phone">
                         </div>
                         <div class="form-group form-inline">
 
                             @*手机验证码*@
-                            <input type="password" class="form-control" style="background:rgba(0,0,0,0.5);border-width:2px;width:186px" placeholder=" Verification code">
-                            <button type="button" class="btn btn-outline-danger">Get Code</button>
+                            <input type="password" id="ValidateCode" class="form-control" style="background:rgba(0,0,0,0.5);color:aliceblue;border-width:2px;width:186px" placeholder=" Verification code">
+                            <button type="button" class="btn btn-outline-danger" id="GetCodeBtn">Get Code</button>
 
                         </div>
                         @*注册按钮*@
@@ -67,15 +75,130 @@
 
     <script>
 
+        //
+        //验证码获取事件
+        $("#GetCodeBtn").click(function () {
+            var phone = $("#PhoneNumber").val();
+            if (phone == "") {
+                layer.msg("电话号码不能为空！");
+                return false;
+            }
+            //手机号正则
+            var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+            //电话
+            if (!phoneReg.test(phone)) {
+                layer.msg('请输入有效的手机号码！');
+                return false;
+            }
+            var code = $("#ValidateCode").val();
+
+            $.ajax({
+                url: 'https://localhost:44306/api/identity/ecd'
+                , type: 'post'
+                , data: JSON.stringify({ PhoneNumber: phone, ValidateCode: '00000' })
+                , contentType: "application/json"
+                // , headers: { "Content-Type": "application/json" }
+                , success: function (res) {
+                    console.log(res);
+                    if (res.code == 0) {
+                        layer.msg("请2分钟后重试！");
+                    }
+                    else {
+                        layer.msg("发送成功！");
+                    }
+                }//success
+            }).fail(function () {
+                layer.msg("服务器繁忙！");
+            });//ajax
+        });
+
+        //
+        //注册按钮事件
         $("#Register").click(function () {
-            location.href = '/User/Login';
+            var phone = $("#PhoneNumber").val();
+            if (phone == "") {
+                layer.msg("电话号码不能为空！");
+                return false;
+            }
+            //手机号正则
+            var phoneReg = /(^1[3|4|5|7|8]\d{9}$)|(^09\d{8}$)/;
+            //电话
+            if (!phoneReg.test(phone)) {
+                layer.msg('请输入有效的手机号码！');
+                return false;
+            }
+            var code = $("#ValidateCode").val();
+            if (code == "") {
+                layer.msg("验证码不能为空！");
+                return false;
+            } //
+
+            $.ajax({
+                url: 'https://localhost:44306/api/identity/create'
+                , type: 'post'
+                , data: JSON.stringify({ PhoneNumber: phone, ValidateCode: code })
+                , contentType: "application/json"
+                // , headers: { "Content-Type": "application/json" }
+                , success: function (res) {
+                    console.log(res);
+                    if (res.code == 0) {//错误
+                        if (res.msg == "账号已存在，请前往登录！") {
+
+                            layer.msg(res.msg, {
+                                time: 1500, //20s后自动关闭
+                            }, function () {
+                                layer.confirm('小主！要前往登录吗？', {
+                                    btn: ['是的', '不要'] //按钮
+                                }, function () {
+                                    $.ajax({
+                                        url: 'https://localhost:44306/api/identity/loginphone'
+                                        , type: 'post'
+                                        , data: JSON.stringify({ PhoneNumber: phone, ValidateCode: code })
+                                        , contentType: "application/json"
+                                        // , headers: { "Content-Type": "application/json" }
+                                        , success: function (res) {
+                                            console.log(res);
+                                            if (res.code == 0) {//错误
+                                                layer.msg(res.msg);
+                                            }
+                                            else {
+                                                layer.msg(res.msg);
+                                                $.cookie("token", res.data.token);
+                                                location.href = "/User/UserCenter";
+                                            }
+                                        }//success
+                                    }).fail(function () {
+                                        layer.msg("服务器繁忙！");
+                                    });//ajax
+                                })
+
+                            });
+
+                            return;
+                        }
+                        layer.msg(res.msg);
+                    }
+                    else {
+                        layer.msg(res.msg);
+                    }
+                }//success
+            }).fail(function () {
+                layer.msg("服务器繁忙！");
+            });//ajax
+        });
+
+
+        $("#GotoLogin").click(function () {
+            location.href = "/User/Login";
         });
 
         //
         //注册框特效
+        $("#GotoLogin").hide();
         $("#RegisterDiv").hide();
         $("#ShowRegisterDiv").click(function () {
-            $("#ShowRegisterDiv").fadeOut(2000);
+            $("#ShowRegisterDiv").fadeOut(1000);
+            $("#GotoLogin").fadeIn(2000);
             $("#RegisterDiv").fadeIn(3000);
         }); //注册框特效
 
