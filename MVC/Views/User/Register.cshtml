@@ -91,6 +91,7 @@
                 return false;
             }
             var code = $("#ValidateCode").val();
+            var index = layer.load();
 
             $.ajax({
                 url: 'https://localhost:44306/api/identity/ecd'
@@ -101,14 +102,14 @@
                 , success: function (res) {
                     console.log(res);
                     if (res.code == 0) {
-                        layer.msg("请2分钟后重试！");
+                        layer.msg("请2分钟后重试！", function () { layer.close(index); });
                     }
                     else {
-                        layer.msg("发送成功！");
+                        layer.msg("发送成功！", function () { layer.close(index); });
                     }
                 }//success
             }).fail(function () {
-                layer.msg("服务器繁忙！");
+                layer.msg("服务器繁忙！", function () { layer.close(index); });
             });//ajax
         });
 
@@ -132,6 +133,7 @@
                 layer.msg("验证码不能为空！");
                 return false;
             } //
+            var index2 = layer.load();
 
             $.ajax({
                 url: 'https://localhost:44306/api/identity/create'
@@ -144,9 +146,7 @@
                     if (res.code == 0) {//错误
                         if (res.msg == "账号已存在，请前往登录！") {
 
-                            layer.msg(res.msg, {
-                                time: 1500, //20s后自动关闭
-                            }, function () {
+                            layer.msg(res.msg, function () {
                                 layer.confirm('小主！要前往登录吗？', {
                                     btn: ['是的', '不要'] //按钮
                                 }, function () {
@@ -159,31 +159,39 @@
                                         , success: function (res) {
                                             console.log(res);
                                             if (res.code == 0) {//错误
-                                                layer.msg(res.msg);
+                                                layer.msg(res.msg, function () { layer.close(index2); });
                                             }
                                             else {
-                                                layer.msg(res.msg);
                                                 $.cookie("token", res.data.token);
-                                                location.href = "/User/UserCenter";
+                                                layer.msg(res.msg, function () {
+                                                    layer.close(index2);
+                                                    location.href = "/User/UserCenter";
+                                                });
                                             }
                                         }//success
                                     }).fail(function () {
-                                        layer.msg("服务器繁忙！");
+                                        layer.msg("服务器繁忙！", function () { layer.close(index2); });
                                     });//ajax
                                 })
-
                             });
-
+                            layer.close(index2);
                             return;
                         }
-                        layer.msg(res.msg);
+                        layer.msg(res.msg, function () {
+                            layer.close(index2);
+                        });
                     }
                     else {
-                        layer.msg(res.msg);
+                        layer.msg(res.msg, function () {
+                            layer.close(index2);
+                            location.href = "/User/Login";
+                        });
                     }
                 }//success
             }).fail(function () {
-                layer.msg("服务器繁忙！");
+                layer.msg("服务器繁忙！", function () {
+                    layer.close(index2);
+                });
             });//ajax
         });
 

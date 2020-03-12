@@ -113,7 +113,7 @@
                 return false;
             }
             var code = $("#ValidateCode").val();
-
+            var index = layer.load();
             $.ajax({
                 url: 'https://localhost:44306/api/identity/ecd'
                 , type: 'post'
@@ -122,14 +122,18 @@
                 // , headers: { "Content-Type": "application/json" }
                 , success: function (res) {
                     if (res.code == 0) {
-                        layer.msg("请2分钟后重试！");
+                        layer.msg("请2分钟后重试！", function () { layer.close(index); });
+
                     }
                     else {
-                        layer.msg("发送成功！");
+                        layer.msg("发送成功！", function () { layer.close(index); });
                     }
                 }//success
             }).fail(function () {
-                layer.msg("服务器繁忙！");
+                layer.msg("服务器繁忙！", function () {
+                    layer.close(index);
+
+                });
             });//ajax
         });
 
@@ -153,7 +157,7 @@
                 layer.msg("验证码不能为空！");
                 return false;
             } //
-
+            var index3 = layer.load();
             $.ajax({
                 url: 'https://localhost:44306/api/identity/loginphone'
                 , type: 'post'
@@ -163,16 +167,24 @@
                 , success: function (res) {
                     console.log(res);
                     if (res.code == 0) {//错误
-                        layer.msg(res.msg);
+                        layer.msg(res.msg, function () {
+                            layer.close(index3);
+
+                        });
                     }
                     else {
-                        layer.msg(res.msg);
+
                         $.cookie("token", res.data.token);
-                        location.href = "/User/UserCenter";
+                        layer.msg(res.msg, function () {
+                            layer.close(index3);
+                            location.href = "/User/UserCenter";
+                        });
                     }
                 }//success
             }).fail(function () {
-                layer.msg("服务器繁忙！");
+                layer.msg("服务器繁忙！", function () {
+                    layer.close(index3);
+                });
             });//ajax
 
         });
@@ -183,16 +195,16 @@
 
             var account = $("#Account").val();
             if (account == "") {
-                layer.msg("电话号码不能为空！");
+                layer.msg("账号不能为空！");
                 return false;
             }
 
             var password = $("#Password").val();
             if (password == "") {
-                layer.msg("验证码不能为空！");
+                layer.msg("密码不能为空！");
                 return false;
             } //
-
+            var index2 = layer.load();
             $.ajax({
                 url: 'https://localhost:44306/api/identity/login'
                 , type: 'post'
@@ -202,26 +214,29 @@
                 , success: function (res) {
                     console.log(res);
                     if (res.code == 0) {//错误
-                        layer.msg(res.msg);
+                        layer.msg(res.msg, function () {
+                            layer.close(index2);
+                        });
                     }
                     else {
-                        layer.msg(res.msg);
                         $.cookie("token", res.data.token);
-                        location.href = "/User/UserCenter";
+
+                        layer.msg(res.msg, function () {
+                            layer.close(index2);
+                            location.href = "/User/UserCenter";
+                        });
+
                     }
                 }//success
             }).fail(function () {
-                layer.msg("服务器繁忙！");
+                layer.close(index);
+                layer.msg("服务器繁忙！", function () {
+                    layer.close(index2);
+                });
             });//ajax
         });
 
     </script>
-
-
-
-
-
-
 
 
     <script>
