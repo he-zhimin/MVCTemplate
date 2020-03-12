@@ -4,26 +4,56 @@
     Layout = "~/Views/Shared/_LayoutIndex.cshtml";
 }
 
+<div style="margin:204px 120px">
 
-<div class="alert alert-info" role="alert">
-    Welcome！<span id="spanNickName"></span>
-
-    <div class="waifu" id="waifu" style="margin-left:900px">
-        <div class="waifu-tips" style="opacity: 1;"></div>
-        <canvas id="live2d" width="480" height="450" class="live2d"></canvas>
-        <div class="waifu-tool">
-            <span class="fui-home"></span>
-            <span class="fui-chat"></span>
-            <span class="fui-eye"></span>
-            <span class="fui-user"></span>
-            <span class="fui-photo"></span>
-            <span class="fui-info-circle"></span>
-            <span class="fui-cross"></span>
+    <div class="form-row" style="width:700px">
+        <div class="form-group col-md-6 form-inline">
+            <label for="inputEmail4">账号：</label>
+            <input type="text" style="background:rgba(0,0,0,0.2);color:aliceblue" readonly="readonly" class="form-control" id="inputEmail4">
         </div>
     </div>
+    <div class="form-row" style="width:700px;margin-top:7px">
+        <div class="form-group col-md-6 form-inline">
+            <label for="inputEmail4">昵称：</label>
+            <input type="text" style="background:rgba(0,0,0,0.2);color:aliceblue" class="form-control" id="inputEmail4">
+        </div>
+    </div>
+    <div class="form-row" style="width:700px;margin-top:7px">
+        <div class="form-group col-md-6 form-inline">
+            <label for="inputEmail4">邮箱：</label>
+            <input type="text" class="form-control" style="background:rgba(0,0,0,0.2);color:aliceblue" readonly="readonly" value="无" id="inputEmail4">
+        </div>
+    </div>
+    <div class="form-row" style="width:700px;margin-top:7px">
+        <div class="form-group col-md-6 form-inline">
+            <label for="inputEmail4">手机：</label>
+            <input type="text" style="background:rgba(0,0,0,0.2);color:aliceblue" readonly="readonly" class="form-control" id="inputEmail4">
+        </div>
+    </div>
+    <div class="form-row" style="width:700px;margin-top:7px">
+        <div class="form-group col-md-6  ">
+            <button style="margin-left:-45px" class="btn btn-outline-danger">&nbsp;&nbsp;修&nbsp;&nbsp;改&nbsp;&nbsp;</button>
+        </div>
+    </div>
+
+
 </div>
 
 
+
+<div class="waifu" id="waifu" style="margin-left:680px;">
+    <div class="waifu-tips" style="opacity: 1;"></div>
+    <canvas id="live2d" width="630" height="600" class="live2d"></canvas>
+    <div class="waifu-tool">
+        <span class="fui-home"></span>
+        <span class="fui-chat"></span>
+        <span class="fui-eye"></span>
+        <span class="fui-user"></span>
+        <span class="fui-photo"></span>
+        <span class="fui-info-circle"></span>
+        <span class="fui-cross"></span>
+    </div>
+</div>
 @*<div class="card bg-dark text-white">
         <img src="~/StaticResources/Img/admin.png" class="card-img" alt="...">
         <div class="card-img-overlay">
