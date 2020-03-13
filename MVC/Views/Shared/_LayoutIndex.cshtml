@@ -86,9 +86,9 @@
                 , headers: { "Authorization": "Bearer " + $.cookie("token") }
                 , success: function (res) {
                     console.log(res);
-                    //if (res.id < 6) {
-                    //    $("#img").attr("src", "/StaticResources/Img/" + res.id + ".png");
-                    //}
+                    if (res.id < 6) {
+                        $("#img").attr("src", "/StaticResources/Img/" + res.id + ".png");
+                    }
                     if (res.roleDtos[0] == null) {
                         $("#RoleName").html("游客");
                     }
