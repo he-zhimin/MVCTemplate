@@ -34,9 +34,9 @@
             <div class="col-md-2" id="s">
                 <ul class="nav flex-column">
 
-                    <li class="nav-item" style="margin-top:20px"><img style="width:130px;height:130px;border-radius:50%;opacity:0.8" src="~/StaticResources/Img/369494.jpg.270.jpg" /></li>
+                    <li class="nav-item" style="margin-top:20px"><img id="img" style="width:140px;height:140px;border-radius:50%;opacity:0.9" src="~/StaticResources/Img/2.png" /></li>
 
-                    <li class="nav-item"><a href="#" class="badge badge-info" id="RoleName">管理员:</a><a href="#" id="NickName" class="badge badge-secondary">Admin</a></li>
+                    <li class="nav-item"><a href="#" class="badge badge-info" id="RoleName">管理员:</a><a href="#" id="NickName" style="background:rgba(0,0,0,0.2)" class="badge badge-secondary">Admin</a></li>
                     <li class="nav-item" style="margin-top:25px">
                         <button type="button" class="btn btn-outline-info">个人信息</button>
                     </li>
@@ -47,7 +47,7 @@
                         <button type="button" class="btn btn-outline-warning">&nbsp;控制台&nbsp;</button>
                     </li>
                     <li class="nav-item" style="margin-top:25px">
-                        <button type="button" class="btn btn-outline-danger">&nbsp;注&nbsp;&nbsp;销&nbsp;</button>
+                        <button type="button" id="LoginOutBtn" class="btn btn-outline-danger">&nbsp;注&nbsp;&nbsp;销&nbsp;</button>
                     </li>
                     <li class="nav-item" style="margin-top:25px">
                         <button type="button" class="btn btn-outline-dark">关于作者</button>
@@ -64,31 +64,88 @@
         </div>
     </div>
     <script>
+        //
+        //窗体加载事件
+        $(function () {
+            IsExistLogin() //检验是否登录
+        })//窗体加载
 
+        //
+        //检验是否登录
+        function IsExistLogin() {
+            if ($.cookie("token") == null) {
+                layer.msg("身份验证已过期，请重新登录！", function () {
+                    location.href = "/User/Login";
+                });
+            }
+            $.ajax({
+                url: 'http://129.211.14.185:8080/api/users'
+                , type: 'get'
+                //, data: JSON.stringify({  })
+                , contentType: "application/json"
+                , headers: { "Authorization": "Bearer " + $.cookie("token") }
+                , success: function (res) {
+                    console.log(res);
+                    //if (res.id < 6) {
+                    //    $("#img").attr("src", "/StaticResources/Img/" + res.id + ".png");
+                    //}
+                    if (res.roleDtos[0] == null) {
+                        $("#RoleName").html("游客");
+                    }
+                    else {
+                        $("#RoleName").html(res.roleDtos[0].name);
+                    }
+                    $("#NickName").html(res.nickName);
+                    $("#spanNickName").html(res.nickName);
+                    $("#inputUserName").val(res.userName);
+                    $("#inputNickName").val(res.nickName);
+                    $("#inputPhone").val(res.phoneNumber);
 
-        //$.ajax({
-        //    url: 'https://localhost:44319/api/users'
-        //    , type: 'get'
-        //    //, data: JSON.stringify({  })
-        //    , contentType: "application/json"
-        //    , headers: { "Authorization": "Bearer " + $.cookie("token") }
-        //    , success: function (res) {
-        //        console.log(res);
+                }//success
+            }).fail(function () {
+                layer.msg("身份验证已过期，请重新登录！", function () {
+                    location.href = "/User/Login";
+                });
 
-        //        $("#RoleName").html(res.roleDtos[0].name);
+            });//ajax
+        };
 
-        //        $("#NickName").html(res.nickName);
-        //        $("#spanNickName").html(res.nickName);
-        //    }//success
-        //}).fail(function () {
-        //    layer.msg("身份验证已过期，请重新登录！", function () {
-        //        location.href = "/User/Login";
-        //    });
+        //
+        //修改昵称
+        $("#BtnEdit").click(function () {
+            var index = layer.load();
+            var nickname = $("#inputNickName").val();
+            $.ajax({
+                url: 'http://129.211.14.185:8080/api/users'
+                , type: 'post'
+                , data: JSON.stringify({ NickName: nickname })
+                , contentType: "application/json"
+                , headers: { "Authorization": "Bearer " + $.cookie("token") }
+                , success: function (res) {
+                    layer.msg("修改成功!", function () {
+                        $("#inputNickName").val(nickname);
+                        $("#NickName").html(nickname);
+                        $("#spanNickName").html(nickname);
 
-        //});//ajax
+                        layer.close(index);
+                    });
+                }
+            }).fail(function () {
+                layer.msg("修改失败!", function () {
+                    layer.close(index);
+                });
+            });//ajax
 
+        });
 
-
+        //
+        //注销登录
+        $("#LoginOutBtn").click(function () {
+            $.cookie("token", null);
+            layer.msg("注销成功！", function () {
+                location.href = "/User/Login";
+            });
+        });
 
     </script>
 
@@ -97,7 +154,7 @@
     <script type="text/javascript">initModel()</script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script type="text/javascript" color="133,129,130" opacity='1' zIndex="-1" count="201" src="~/dist/canvas-nest.js"></script>
+    <script type="text/javascript" color="133,129,130" opacity='1' zIndex="1" count="301" src="~/dist/canvas-nest.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
