@@ -13,7 +13,7 @@
     <script src="~/layui/layui.js"></script>
 
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-
+    <link href="~/Videoeffects/dist/styles/Vidage.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -90,7 +90,17 @@
 
         <div class="layui-body">
             <!-- 内容主体区域 -->
-            <div style="padding: 15px;">  @RenderBody()</div>
+            <div style="padding: 15px;">
+                <div class="Vidage" style=" background: #ffffff">
+                    <div class="Vidage__image"></div>
+                    <video id="VidageVideo" class="Vidage__video" preload="metadata" loop autoplay muted>
+                        <source src="~/Videoeffects/shui.webm" type="video/webm">
+                        <source src="~/Videoeffects/shui.MP4" type="video/mp4">
+                    </video>
+                    <div class="Vidage__backdrop"></div>
+                </div>
+                @RenderBody()
+            </div>
 
         </div>
         <div class="layui-footer">
@@ -232,5 +242,10 @@
     </script>
 
     <script type="text/javascript" color="6,1,1" opacity='1' zIndex="-1" count="99" src="~/dist/canvas-nest.js"></script>
+
+    <script src="~/Videoeffects/dist/scripts/Vidage.js"></script>
+    <script>
+        new Vidage('#VidageVideo');
+    </script>
 </body>
 </html>

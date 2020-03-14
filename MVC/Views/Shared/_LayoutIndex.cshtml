@@ -13,6 +13,7 @@
     <script src="~/StaticResources/layer/layer.js"></script>
     <script src="~/layui/jquery.cookie.js"></script>
     <link href="~/live2d/waifu.css" rel="stylesheet" />
+    <link href="~/Videoeffects/dist/styles/Vidage.css" rel="stylesheet" />
     <style>
         body {
             text-align: center;
@@ -26,8 +27,16 @@
     </style>
 </head>
 <body>
+    <div class="Vidage" style=" background: #ffffff">
+        <div class="Vidage__image"></div>
+        <video id="VidageVideo" class="Vidage__video" preload="metadata" loop autoplay muted>
+            <source src="~/Videoeffects/shui.webm" type="video/webm">
+            <source src="~/Videoeffects/shui.MP4" type="video/mp4">
+        </video>
+        <div class="Vidage__backdrop"></div>
+    </div>
     <div class="container-fluid">
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-success" style="background:rgba(0,0,0,0.1);color:floralwhite" role="alert">
             Welcome！<span id="spanNickName"></span>
         </div>
         <div class="row">
@@ -176,6 +185,10 @@
     <script src="~/live2d/live2d.js"></script>
     <script src="~/live2d/waifu-tips.js"></script>
     <script type="text/javascript">initModel()</script>
+    <script src="~/Videoeffects/dist/scripts/Vidage.min.js"></script>
+    <script>
+        new Vidage('#VidageVideo');
+    </script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script type="text/javascript" color="133,129,130" opacity='1' zIndex="1" count="250" src="~/dist/canvas-nest.js"></script>
