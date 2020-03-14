@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewData["Title"] = "ModuleIndex";
+    Layout = "~/Views/Shared/_LayoutLayuiIndex.cshtml";
+}
+
+<blockquote class="layui-elem-quote" style="background:rgba(0,0,0,0.1)"> 模块管理 </blockquote>
+
+<div class="layui-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称：</label>
+        <div class="layui-input-inline">
+            <input type="text" id="Name" style="background:rgba(0,0,0,0.3)" class="layui-input" value="" />
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn" id="SelectBtn" style="background:rgba(0,0,0,0.3)">查询</button>
+        </div>
+    </div>
+</div>
+
+@*表格*@
+<table id="demo" style="margin-top:-20px" lay-filter="table"></table>
+
+@*头部导航栏*@
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-group">
+        <button lay-event="get" class="layui-btn ">获取选中数据</button>
+        <button lay-event="delete" class="layui-btn layui-btn-danger">删除角色</button>
+        <button lay-event="edit" class="layui-btn layui-btn-warm ">修改角色</button>
+    </div>
+</script>
+
+@*行操作栏*@
+<script type="text/html" id="tool">
+    <a lay-event="get" class="layui-btn btn-sm "> <i class="layui-icon layui-icon-list"></i></a>
+    <a lay-event="delete" class="layui-btn btn-sm  layui-btn-danger"> <i class="layui-icon layui-icon-delete"></i> </a>
+    <a lay-event="edit" class="layui-btn btn-sm  layui-btn-warm "><i class="layui-icon layui-icon-edit"></i></a>
+</script>
+@*自定义模板*@
+<script type="text/html" id="Status">
+    <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="status" {{ d.id%2 == 0 ? 'checked' : '' }}>
+</script>
+
+<script>
+    layui.use(['table', 'form'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        //表格渲染
+        table.render({
+            elem: '#demo'
+            , height: 500
+            , url: 'http://129.211.14.185:8080/api/modules/layui' //数据接口
+            , toolbar: "#toolbar"
+            , page: true //开启分页
+            , limit: 10
+            , headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
+            , cols: [[ //表头
+                { type: "checkbox" }
+                , { field: 'id', title: 'ID', width: 80, sort: true, width: 40 }
+                , { field: 'name', title: '名称', edit: 'text' }
+                , { field: 'url', title: '地址', edit: 'text' }
+                , { field: 'shortName', title: '简称', edit: 'text', width: 80 }
+                , { field: 'parentName', title: '父类名称', edit: 'text', width: 100 }
+                , { field: 'sortNo', title: '排序', edit: 'text', sort: true, width: 40 }
+                , { field: 'levealId', title: '层级', edit: 'text', width: 40 }
+                , { field: 'id', title: '状态', templet: "#Status", sort: true, width: 100 }
+                , { field: 'createTime', title: '创建时间', sort: true }
+                , { toolbar: "#tool", title: '操作' }
+            ]]
+        });//table.render
+
+
+        //
+        //导航栏事件
+        table.on("toolbar(table)", function (obj) {
+            var checkStatus = table.checkStatus('demo');
+
+            switch (obj.event) {
+                case 'get':
+                    layer.alert(JSON.stringify(checkStatus.data));
+                    break;
+                case 'delete':
+                    var strId = "";
+                    for (var i = 0; i < checkStatus.data.length; i++) {
+                        strId += checkStatus.data[i].id + ","
+                    }
+                    layer.msg(strId);
+                    break;
+                case 'edit':
+                    layer.msg("不支持除用户以外的任何人修改！");
+                    break;
+                default:
+            }
+        }); //导航栏事件
+
+        //
+        //行单击栏事件
+        table.on("tool(table)", function (obj) {
+
+
+            switch (obj.event) {
+                case 'get':
+                    layer.alert(JSON.stringify(obj.data));
+                    break;
+                case 'delete':
+                    layer.msg("模块删除成功！");
+                    obj.del();
+                    break;
+                case 'edit':
+                    layer.msg("模块修改成功！");
+                    break;
+                default:
+            }
+        }); //导航栏事件
+
+        //
+        //状态修改
+        form.on('switch(status)', function (obj) {
+            var index = layer.load();
+            layer.msg("修改成功！", function () { layer.close(index) });
+        })//状态修改
+    });
+
+    //
+    //查询
+    $("#SelectBtn").click(function () {
+        var content = $("#SelectContent").val();
+        layui.use('table', function () {
+            var table = layui.table;
+            table.reload('demo', {
+                url: 'http://129.211.14.185:8080/api/modules/layui?name=' + content, where: {
+                    headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
+                }
+            })
+        });//layui table
+    });
+</script>
+

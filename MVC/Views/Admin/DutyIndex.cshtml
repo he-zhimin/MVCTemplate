@@ -1,0 +1,241 @@
+﻿
+@{
+    ViewData["Title"] = "DutyIndex";
+    Layout = "~/Views/Shared/_LayoutLayuiIndex.cshtml";
+}
+
+
+<blockquote class="layui-elem-quote" style="background:rgba(0,0,0,0.1)"> 职务管理 </blockquote>
+<div class="layui-form">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">名称：</label>
+        <div class="layui-input-inline">
+            <input type="text" id="SelectContent" style="background:rgba(0,0,0,0.3)" class="layui-input" value="" />
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn" id="SelectBtn" style="background:rgba(0,0,0,0.3)">查询</button>
+        </div>
+        <label class="layui-form-label">用户：</label>
+        <div class="layui-input-inline">
+            <select id="User" style="background:rgba(0,0,0,0.3)">
+                <option>1</option>
+            </select>
+        </div>
+        <label class="layui-form-label">角色：</label>
+        <div class="layui-input-inline">
+            <select id="Role" style="background:rgba(0,0,0,0.3)">
+                <option>1</option>
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn" id="AddBtn" style="background:rgba(0,0,0,0.3)">添加</button>
+        </div>
+
+    </div>
+</div>
+
+@*表格*@
+<table id="demo" style="margin-top:-20px" lay-filter="table"></table>
+
+@*头部导航栏*@
+<script type="text/html" id="toolbar">
+    <div class="layui-btn-group">
+        <button lay-event="get" class="layui-btn ">获取选中数据</button>
+        <button lay-event="delete" class="layui-btn layui-btn-danger">删除角色</button>
+        <button lay-event="edit" class="layui-btn layui-btn-warm ">修改角色</button>
+
+    </div>
+</script>
+
+@*行操作栏*@
+<script type="text/html" id="tool">
+    <a lay-event="get" class="layui-btn btn-sm "> <i class="layui-icon layui-icon-list"></i></a>
+    <a lay-event="delete" class="layui-btn btn-sm  layui-btn-danger"> <i class="layui-icon layui-icon-delete"></i> </a>
+    <a lay-event="edit" class="layui-btn btn-sm  layui-btn-warm "><i class="layui-icon layui-icon-edit"></i></a>
+</script>
+@*自定义模板*@
+<script type="text/html" id="Status">
+    <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="启用|禁用" lay-filter="status" {{ d.id%2 == 0 ? 'checked' : '' }}>
+</script>
+
+
+
+<script>
+    $(function () {
+        UserDrop();
+        RoleDrop();
+    });
+
+    //
+    //用户下拉框
+    function UserDrop() {
+        $.ajax({
+            url: 'http://129.211.14.185:8080/api/users/all'
+            , type: 'get'
+            , async: false
+            //, data: JSON.stringify({ Name: name })
+            , contentType: "application/json"
+            , headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
+            , success: function (res) {
+
+                $("#User").empty();
+                $(res).each(function () {
+                    var line = '<option value=' + this.id + '>' + this.nickName + '</option>';
+                    $("#User").append(line);
+                })
+            }//success
+        }).fail(function () {
+            if (sessionStorage.getItem("token") == null) {
+                layer.msg("身份验证已过期，请重新登录！", function () {
+                    location.href = "/User/Login";
+                });
+            }
+        });//ajax
+    }//UserDrop
+
+    //
+    //角色下拉框
+    function RoleDrop() {
+        $.ajax({
+            url: 'http://129.211.14.185:8080/api/roles'
+            , type: 'get'
+            , async: false
+            //, data: JSON.stringify({ Name: name })
+            , contentType: "application/json"
+            , headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
+            , success: function (res) {
+
+                $("#Role").empty();
+                $(res.items).each(function () {
+                    var line = '<option value=' + this.id + '>' + this.name + '</option>';
+                    $("#Role").append(line);
+                })
+            }//success
+        }).fail(function () {
+            if (sessionStorage.getItem("token") == null) {
+                layer.msg("身份验证已过期，请重新登录！", function () {
+                    location.href = "/User/Login";
+                });
+            }
+        });//ajax
+    }
+
+    //
+    //添加用户角色关系
+    $("#AddBtn").click(function () {
+        var index = layer.load();
+        var userid = $("#User").val();
+        var roleid = $("#Role").val();
+        $.ajax({
+            url: 'http://129.211.14.185:8080/api/userroles'
+            , type: 'post'
+            , data: JSON.stringify({ UserId: userid, RoleId: roleid })
+            , contentType: "application/json"
+            , headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
+            , success: function (res) {
+                lay.msg(res.msg, function () {
+                    layer.close(index);
+                })
+
+            }//success
+        }).fail(function () {
+            if (sessionStorage.getItem("token") == null) {
+                layer.msg("身份验证已过期，请重新登录！", function () {
+                    location.href = "/User/Login";
+                });
+            }
+        });//ajax
+    });
+
+    //
+    //查询
+    $("#SelectBtn").click(function () {
+        var content = $("#SelectContent").val();
+        layui.use('table', function () {
+            var table = layui.table;
+            table.reload('demo', {
+                url: 'http://129.211.14.185:8080/api/userroles/layui?name=' + content, where: {
+                    headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
+                }
+            })
+        });//layui table
+    });
+
+    layui.use(['table', 'form'], function () {
+        var table = layui.table;
+        var form = layui.form;
+        form.render();
+        //表格渲染
+        table.render({
+            elem: '#demo'
+            , height: 500
+            , url: 'http://129.211.14.185:8080/api/userroles/layui' //数据接口
+            , toolbar: "#toolbar"
+            , page: true //开启分页
+            , limit: 10
+            , headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
+            , cols: [[ //表头
+                { type: "checkbox" }
+                , { field: 'userId', title: '用户ID', width: 80, sort: true }
+                , { field: 'userName', title: '账号', edit: 'text' }
+                , { field: 'nickName', title: '昵称', edit: 'text' }
+                , { field: 'roleId', title: '角色ID', edit: 'text' }
+                , { field: 'roleName', title: '角色名称', edit: 'text' }
+                , { field: 'id', title: '状态', templet: "#Status", sort: true }
+                , { toolbar: "#tool", title: '操作' }
+            ]]
+        });//table.render
+
+
+        //
+        //导航栏事件
+        table.on("toolbar(table)", function (obj) {
+            var checkStatus = table.checkStatus('demo');
+
+            switch (obj.event) {
+                case 'get':
+                    layer.alert(JSON.stringify(checkStatus.data));
+                    break;
+                case 'delete':
+                    var strId = "";
+                    for (var i = 0; i < checkStatus.data.length; i++) {
+                        strId += checkStatus.data[i].id + ","
+                    }
+                    layer.msg(strId);
+                    break;
+                case 'edit':
+                    layer.msg("不支持除用户以外的任何人修改！");
+                    break;
+                default:
+            }
+        }); //导航栏事件
+
+        //
+        //行单击栏事件
+        table.on("tool(table)", function (obj) {
+
+
+            switch (obj.event) {
+                case 'get':
+                    layer.alert(JSON.stringify(obj.data));
+                    break;
+                case 'delete':
+                    layer.msg("职务删除成功！");
+                    obj.del();
+                    break;
+                case 'edit':
+                    layer.msg("职务修改成功！");
+                    break;
+                default:
+            }
+        }); //导航栏事件
+
+        //
+        //状态修改
+        form.on('switch(status)', function (obj) {
+            var index = layer.load();
+            layer.msg("修改成功！", function () { layer.close(index) });
+        })//状态修改
+    });
+</script>

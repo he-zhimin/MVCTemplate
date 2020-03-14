@@ -179,10 +179,10 @@
                                                 layer.msg(res.msg, function () { layer.close(index2); });
                                             }
                                             else {
-                                                $.cookie("token", res.data.token);
+                                                sessionStorage.setItem("token", res.data.token);
                                                 layer.msg(res.msg, function () {
                                                     layer.close(index2);
-                                                    location.href = "/User/UserCenter";
+                                                    location.href = "/Admin/Index";
                                                 });
                                             }
                                         }//success
@@ -198,10 +198,32 @@
                             layer.close(index2);
                         });
                     }
-                    else {
+                    else {//成功跳往主页
                         layer.msg(res.msg, function () {
                             layer.close(index2);
-                            location.href = "/User/Login";
+                            $.ajax({
+                                url: 'http://129.211.14.185:80/api/identity/loginphone'
+                                , type: 'post'
+                                , data: JSON.stringify({ PhoneNumber: phone, ValidateCode: code })
+                                , contentType: "application/json"
+                                // , headers: { "Content-Type": "application/json" }
+                                , success: function (res) {
+                                    console.log(res);
+                                    if (res.code == 0) {//错误
+                                        layer.msg(res.msg, function () { layer.close(index2); });
+                                    }
+                                    else {
+                                        sessionStorage.setItem("token", res.data.token);
+                                        layer.msg(res.msg, function () {
+                                            layer.close(index2);
+                                            location.href = "/Admin/Index";
+                                        });
+                                    }
+                                }//success
+                            }).fail(function () {
+                                layer.msg("服务器繁忙！", function () { layer.close(index2); });
+                            });//ajax
+
                         });
                     }
                 }//success
@@ -230,7 +252,7 @@
     </script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script type="text/javascript" color="227,199,224" opacity='1' zIndex="1" count="301" src="~/dist/canvas-nest.js"></script>
+    <script type="text/javascript" color="227,199,224" opacity='1' zIndex="1" count="250" src="~/dist/canvas-nest.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>

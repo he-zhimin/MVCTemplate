@@ -1,0 +1,236 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title</title>
+    <link href="~/css/style.css" rel="stylesheet" />
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/layui/jquery.cookie.js"></script>
+    <script src="~/layer/layer.js"></script>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <script src="~/layui/layui.js"></script>
+
+    <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+
+</head>
+<body>
+
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">缺缺管理后台</div>
+            <!-- 头部区域（可配合layui已有的水平导航） -->
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item  "><a href="/Admin/Index">控制台</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:Juejin()">
+                        <img src="~/StaticResources/Img/juejinlogo.png" class="layui-nav-img">
+                        博客
+                    </a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="https://github.com/ZhangQueque" target="_blank">
+                        <img src="~/StaticResources/Img/github.png" class="layui-nav-img">
+                        GitHub
+                    </a>
+                </li>
+                <li class="layui-nav-item"><a href="javascript: Qian() ">关于作者</a></li>
+                <li class="layui-nav-item">
+                    <a href="javascript:;">联系方式</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:QQ()">QQ</a></dd>
+                        <dd><a href="javascript:Wechat()">WeChat</a></dd>
+                        <dd><a href="javascript:Email()">Email</a></dd>
+                    </dl>
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+                    <a href="javascript:;">
+                        <img src="~/StaticResources/Img/2.png" id="NavImg" class="layui-nav-img">
+                        <span id="NavNickName">Admin</span>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/User/UserCenter">基本资料</a></dd>
+                        <dd><a href="">安全设置</a></dd>
+                        <dd><a href="javascript: LoginOut()" id="LoginOutBtn">注销</a></dd>
+                    </dl>
+                </li>
+            </ul>
+        </div>
+
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll">
+                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                    <li class="layui-nav-item">
+                        <img id="img" style=" width:140px;height:140px;margin-left:30px;margin-top:5px;border-radius:50%;opacity:0.9" src="~/StaticResources/Img/2.png" />
+                    </li>
+                    <li class="layui-nav-item">
+                        <a href="#" class="btn btn-dark"><span id="RoleName">管理员</span>:<span id="NickName">Admin</span></a>
+                    </li>
+                    <li class="layui-nav-item " style="margin-left:50px;margin-top:10px">
+                        <a href="/User/UserCenter">个人中心</a>
+                    </li>
+                    <li class="layui-nav-item " style="margin-left:50px;margin-top:10px">
+                        <a href="/Admin/UserIndex">用户管理</a>
+                    </li>
+                    <li class="layui-nav-item" style="margin-left:50px;margin-top:10px">
+                        <a class="" href="/Admin/RoleIndex">角色管理</a>
+                    </li>
+                    <li class="layui-nav-item" style="margin-left:50px;margin-top:10px">
+                        <a href="/Admin/ModuleIndex">模块管理</a>
+                    </li>
+                    <li class="layui-nav-item" style="margin-left:50px;margin-top:10px"><a href="/Admin/DutyIndex">职务管理</a></li>
+                    <li class="layui-nav-item" style="margin-left:50px;margin-top:10px"><a href="">权限管理</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="layui-body">
+            <!-- 内容主体区域 -->
+            <div style="padding: 15px;">  @RenderBody()</div>
+
+        </div>
+        <div class="layui-footer">
+            <!-- 底部固定区域 -->
+            © layui.com - 底部固定区域
+        </div>
+        <img id="QQ" width="410" style="display:none" src="~/StaticResources/Img/qq.jpg" />
+        <img id="Wechat" width="410" style="display:none" src="~/StaticResources/Img/wechat.jpg" />
+        <img id="Email" width="410" style="display:none" src="~/StaticResources/Img/email.png" />
+        <img id="Qian" width="410" style="display:none" src="~/StaticResources/Img/qian.jpg" />
+        <div id="Juejin" style="display:none">
+            <a target="_Blank" href="http://juejin.im/user/5d6a5a57e51d453bb13b666b"><img width="410" src="~/StaticResources/Img/juejin.jpg" /></a>
+            <p style="margin:12px auto; font-size:20px"> <a target="_Blank" href="http://juejin.im/user/5d6a5a57e51d453bb13b666b">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;跟我一起在掘金学习最新技术吧~掘金</a></p>
+        </div>
+
+    </div>
+    <script>
+        //
+        //QQ
+        function QQ() {
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                area: ['auto'],
+                skin: 'layui-layer-nobg', //没有背景色
+                shadeClose: true,
+                content: $('#QQ')
+            });
+        };
+
+        //
+        //Wechat
+        function Wechat() {
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                area: ['auto'],
+                skin: 'layui-layer-nobg', //没有背景色
+                shadeClose: true,
+                content: $('#Wechat')
+            });
+        };
+
+        //
+        //Email
+        function Email() {
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                area: ['auto'],
+                skin: 'layui-layer-nobg', //没有背景色
+                shadeClose: true,
+                content: $('#Email')
+            });
+        }
+
+        //
+        //Email
+        function Qian() {
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                area: ['auto'],
+                skin: 'layui-layer-nobg', //没有背景色
+                shadeClose: true,
+                content: $('#Qian')
+            });
+        }
+
+        //
+        //Juejin
+        function Juejin() {
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                area: ['auto'],
+                skin: 'layui-layer-nobg', //没有背景色
+                shadeClose: true,
+                content: $('#Juejin')
+            });
+        }
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var element = layui.element;
+        });
+
+        //
+        //窗体加载事件
+        $(function () {
+            IsExistLogin();//检验是否登录
+        })//窗体加载
+
+        //
+        //检验是否登录
+        function IsExistLogin() {
+
+            $.ajax({
+                url: 'http://129.211.14.185:8080/api/users'
+                , type: 'get'
+                //, data: JSON.stringify({  })
+                , contentType: "application/json"
+                , headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
+                , success: function (res) {
+                    if (res.id < 6) {
+                        $("#img").attr("src", "/StaticResources/Img/" + res.id + ".png");
+                        $("#NavImg").attr("src", "/StaticResources/Img/" + res.id + ".png");
+                    }
+                    if (res.roleDtos[0] == null) {
+                        $("#RoleName").html("游客");
+                    }
+                    else {
+                        $("#RoleName").html(res.roleDtos[0].name);
+                    }
+                    $("#NickName").html(res.nickName);
+                    $("#NavNickName").html(res.nickName);
+                }//success
+            }).fail(function () {
+                layer.msg("身份验证已过期，请重新登录！", function () {
+                    location.href = "/User/Login";
+                });
+
+            });//ajax
+        };//IsExistLogin检验是否登录
+
+        //
+        //注销
+        function LoginOut() {
+            sessionStorage.removeItem("token");
+            layer.msg("注销成功！", function () {
+                location.href = "/User/Login"
+            });
+        };//注销
+
+    </script>
+
+    <script type="text/javascript" color="6,1,1" opacity='1' zIndex="-1" count="99" src="~/dist/canvas-nest.js"></script>
+</body>
+</html>

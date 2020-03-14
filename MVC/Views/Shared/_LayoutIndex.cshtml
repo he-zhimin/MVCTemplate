@@ -44,13 +44,13 @@
                         <button type="button" class="btn btn-outline-success">安全设置</button>
                     </li>
                     <li class="nav-item" style="margin-top:25px">
-                        <button type="button" class="btn btn-outline-warning">&nbsp;控制台&nbsp;</button>
+                        <button type="button" onclick="Index()" class="btn btn-outline-warning">&nbsp;控制台&nbsp;</button>
                     </li>
                     <li class="nav-item" style="margin-top:25px">
                         <button type="button" id="LoginOutBtn" class="btn btn-outline-danger">&nbsp;注&nbsp;&nbsp;销&nbsp;</button>
                     </li>
                     <li class="nav-item" style="margin-top:25px">
-                        <button type="button" class="btn btn-outline-dark">关于作者</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="Qian()">关于作者</button>
                     </li>
                 </ul>
 
@@ -61,6 +61,7 @@
 
 
             </div>
+            <img id="Qian" width="410" style="display:none" src="~/StaticResources/Img/qian.jpg" />
         </div>
     </div>
     <script>
@@ -71,19 +72,35 @@
         })//窗体加载
 
         //
+        //跳转到控制台
+        function Index() {
+            location.href = "/Admin/Index";
+        }
+
+        //
+        //钱
+        function Qian() {
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: 0,
+                area: ['auto'],
+                skin: 'layui-layer-nobg', //没有背景色
+                shadeClose: true,
+                content: $('#Qian')
+            });
+        }
+
+        //
         //检验是否登录
         function IsExistLogin() {
-            if ($.cookie("token") == null) {
-                layer.msg("身份验证已过期，请重新登录！", function () {
-                    location.href = "/User/Login";
-                });
-            }
+
             $.ajax({
                 url: 'http://129.211.14.185:8080/api/users'
                 , type: 'get'
                 //, data: JSON.stringify({  })
                 , contentType: "application/json"
-                , headers: { "Authorization": "Bearer " + $.cookie("token") }
+                , headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
                 , success: function (res) {
                     console.log(res);
                     if (res.id < 6) {
@@ -108,11 +125,18 @@
                 });
 
             });//ajax
-        };
+        };//检验是否登录
 
         //
         //修改昵称
         $("#BtnEdit").click(function () {
+            Edit();
+
+        });//修改昵称
+
+        //
+        //修改方法
+        function Edit() {
             var index = layer.load();
             var nickname = $("#inputNickName").val();
             $.ajax({
@@ -120,7 +144,7 @@
                 , type: 'post'
                 , data: JSON.stringify({ NickName: nickname })
                 , contentType: "application/json"
-                , headers: { "Authorization": "Bearer " + $.cookie("token") }
+                , headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
                 , success: function (res) {
                     layer.msg("修改成功!", function () {
                         $("#inputNickName").val(nickname);
@@ -131,21 +155,21 @@
                     });
                 }
             }).fail(function () {
-                layer.msg("修改失败!", function () {
-                    layer.close(index);
+                layer.msg("身份验证已过期，请重新登录！", function () {
+                    location.href = "/User/Login";
                 });
             });//ajax
-
-        });
+        };//修改方法
 
         //
         //注销登录
         $("#LoginOutBtn").click(function () {
-            $.cookie("token", null);
+            sessionStorage.removeItem("token");
             layer.msg("注销成功！", function () {
-                location.href = "/User/Login";
+                location.href = "/User/Login"
+
             });
-        });
+        });//注销登录
 
     </script>
 
@@ -154,7 +178,7 @@
     <script type="text/javascript">initModel()</script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script type="text/javascript" color="133,129,130" opacity='1' zIndex="1" count="301" src="~/dist/canvas-nest.js"></script>
+    <script type="text/javascript" color="133,129,130" opacity='1' zIndex="1" count="250" src="~/dist/canvas-nest.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
