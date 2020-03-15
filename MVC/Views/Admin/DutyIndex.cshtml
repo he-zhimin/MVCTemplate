@@ -134,7 +134,7 @@
             , contentType: "application/json"
             , headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
             , success: function (res) {
-                lay.msg(res.msg, function () {
+                layer.msg(res.msg, function () {
                     layer.close(index);
                 })
 
