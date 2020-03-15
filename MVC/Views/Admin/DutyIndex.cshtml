@@ -136,6 +136,14 @@
             , success: function (res) {
                 layer.msg(res.msg, function () {
                     layer.close(index);
+                    layui.use('table', function () {
+                        var table = layui.table;
+                        table.reload('demo', {
+                            url: 'http://129.211.14.185:8080/api/userroles/layui', where: {
+                                headers: { "Authorization": "Bearer " + sessionStorage.getItem("token") }
+                            }
+                        })
+                    });//layui table
                 })
 
             }//success
